@@ -1,820 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Premium AI Step Counter</title>
-  <style>
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0; padding: 0; height: 100vh;
-      background: linear-gradient(-45deg, #6a11cb, #2575fc, #ff6a00, #ee7752);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      display: flex; justify-content: center; align-items: center;
-      color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.5);
-      overflow: hidden; /* Prevent scroll on mobile keyboards */
-    }
-    .container {
-      width: 90%; max-width: 400px;
-      padding: 30px;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 20px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Enhanced shadow */
-      transition: transform 0.3s ease-in-out; /* Smooth transition for UI changes */
-    }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    #steps, #calories { font-size: 3rem; font-weight: 700; margin: 20px 0 10px 0; letter-spacing: 2px; }
-    #activityStatus { font-size: 1.5rem; font-weight: 600; margin-bottom: 15px; color: #00ff99; }
-    #lastStepTime, #location, #goalMessage, #insights { font-size: 1rem; margin-top: 10px; }
-    #progress-container {
-      width: 100%; background: rgba(255,255,255,0.2);
-      border-radius: 30px; height: 20px;
-      overflow: hidden; box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      margin-top: 20px;
-    }
-    #progress-bar {
-      height: 100%; width: 0%;
-      background: #00ff99;
-      border-radius: 30px;
-      transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother animation */
-    }
-    .pulse {
-      animation: pulseAnim 0.8s ease-in-out infinite alternate; /* Slower, more prominent pulse */
-    }
-    @keyframes pulseAnim {
-      0% { box-shadow: 0 0 15px #00ff99; }
-      100% { box-shadow: 0 0 30px #00ff99, 0 0 5px #00ff99 inset; }
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 25px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #2575fc;
-      background: #fff;
-      border: none;
-      border-radius: 40px;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    }
-    button:hover { background: #2575fc; color: #fff; transform: translateY(-3px); }
-    button:active { transform: translateY(0); }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Suhana 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap');
 
-    #logoutBtn { background: #ff4444; color: white; margin-top: 10px; }
-    #logoutBtn:hover { background: #cc0000; }
-    input {
-      width: calc(100% - 20px); /* Adjust for padding */
-      padding: 12px; /* Slightly larger padding */
-      font-size: 1rem; border-radius: 10px;
-      border: none; margin-bottom: 15px;
-      box-sizing: border-box; /* Include padding in width */
-      background: rgba(255,255,255,0.9); /* Slightly opaque input */
-      color: #333;
-    }
-    .hidden { display: none; }
-    #errorMsg { color: #ff8080; font-weight: bold; min-height: 1.2em; }
-    #toggleLink {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: #00cc99;
-      cursor: pointer;
-      text-decoration: underline;
-      user-select: none;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    /* Illuminati Symbol Style */
-    #illuminatiSymbol {
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 15px auto;
-      cursor: pointer;
-      user-select: none;
-      filter: drop-shadow(0 0 3px #00ff99);
-      transition: transform 0.3s ease;
-    }
-    #illuminatiSymbol:hover {
-      transform: scale(1.2) rotate(15deg);
-    }
+        /* Floating Hearts Background */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.5);
+            animation: floatUp 6s linear infinite;
+            bottom: -10vh;
+            z-index: 0;
+        }
 
-    /* Weekly Summary Table Styles */
-    #weeklySummaryContainer {
-      margin-top: 25px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px;
-      max-height: 180px; /* Limit height to enable scrolling */
-      overflow-y: auto; /* Enable vertical scrolling */
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
 
-    #weeklySummaryTable {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-      color: #e0e0e0;
-    }
+        .container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
 
-    #weeklySummaryTable th, #weeklySummaryTable td {
-      padding: 8px 5px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      text-align: center;
-      vertical-align: middle;
-    }
+        .container:hover {
+            transform: scale(1.02);
+        }
 
-    #weeklySummaryTable th {
-      background: rgba(255, 255, 255, 0.2);
-      font-weight: 600;
-      position: sticky; /* Make header sticky when scrolling */
-      top: 0;
-      z-index: 1; /* Ensure header stays on top */
-    }
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #ff4757;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
 
-    #weeklySummaryTable tbody tr:last-child td {
-      border-bottom: none;
-    }
+        .message {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
 
-    #weeklySummaryTable tbody tr:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
+        .highlight {
+            color: #ff6b81;
+            font-weight: bold;
+        }
 
-    /* Animation for table rows */
-    @keyframes fadeInSlideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    #weeklySummaryTable tbody tr {
-      animation: fadeInSlideUp 0.5s ease-out forwards;
-      opacity: 0; /* Start hidden */
-    }
-    /* Add slight delay for each row */
-    #weeklySummaryTable tbody tr:nth-child(1) { animation-delay: 0.0s; }
-    #weeklySummaryTable tbody tr:nth-child(2) { animation-delay: 0.1s; }
-    #weeklySummaryTable tbody tr:nth-child(3) { animation-delay: 0.2s; }
-    #weeklySummaryTable tbody tr:nth-child(4) { animation-delay: 0.3s; }
-    #weeklySummaryTable tbody tr:nth-child(5) { animation-delay: 0.4s; }
-    #weeklySummaryTable tbody tr:nth-child(6) { animation-delay: 0.5s; }
-    #weeklySummaryTable tbody tr:nth-child(7) { animation-delay: 0.6s; }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative; /* For absolute positioning of No btn */
+        }
 
-  </style>
+        button {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        #yesBtn {
+            background-color: #ff4757;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #ff2e43;
+        }
+
+        #noBtn {
+            background-color: #f1f2f6;
+            color: #333;
+        }
+
+        /* Hidden Celebration Div */
+        #celebration {
+            display: none;
+            text-align: center;
+        }
+        
+        #celebration h2 {
+            color: #ff4757;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+        }
+        
+        #celebration p {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Avatar/Image placeholder styling */
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background-color: #ffdde1;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid #ff4757;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div id="loginBox">
-      <svg id="illuminatiSymbol" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Illuminati Symbol" role="img" title="Show saved users">
-        <circle cx="32" cy="32" r="30" stroke="#00ff99" stroke-width="3" fill="none" />
-        <polygon points="32,6 58,58 6,58" stroke="#00ff99" stroke-width="3" fill="none"/>
-        <circle cx="32" cy="32" r="10" fill="#00ff99" />
-        <circle cx="32" cy="32" r="5" fill="black" />
-      </svg>
 
-      <h1 id="formTitle">Login</h1>
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="number" id="weight" placeholder="Weight (kg)" min="30" max="200" class="hidden" />
-      <input type="number" id="dailyGoal" placeholder="Daily Goal (steps)" min="100" class="hidden" />
-      <button id="actionBtn" onclick="login()">Login</button>
-      <p id="errorMsg"></p>
-      <div id="toggleLink" onclick="toggleForm()">Create Account</div>
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 2 + "s"; 
+            heart.style.fontSize = Math.random() * 20 + 20 + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 300);
+    </script>
+
+    <div class="container" id="mainCard">
+        <div class="avatar">💑</div>
+        <h1>Hey Suhana!</h1>
+        <p class="message">
+            Tumhe dekha toh jana ki life kitni beautiful ho sakti hai. <br>
+            Suhana, tum meri har smile aur har khushi ki wajah ho. <br><br>
+            Mujhe bas tumhara saath chahiye, aaj aur hamesha ke liye. <br>
+            <span class="highlight">Divyansh</span> tumse dil se puchna chahta hai...
+        </p>
+        <h2>Will you be mine? 🌹</h2>
+        
+        <div class="btn-group">
+            <button id="yesBtn" onclick="acceptLove()">Yes! 💖</button>
+            <button id="noBtn" onmouseover="moveButton()">No 🙈</button>
+        </div>
     </div>
 
-    <div id="stepCounterBox" class="hidden">
-      <h1>Premium AI Step Counter</h1>
-      <div id="steps">Steps: 0</div>
-      <div id="calories">Calories: 0.00</div>
-      <div id="activityStatus">Activity: Idle</div>
-      <div id="lastStepTime">Last step: N/A</div>
-      <div id="location">Location: N/A</div>
-      <div id="progress-container">
-        <div id="progress-bar"></div>
-      </div>
-      <p id="goalMessage">Goal: 100 steps. Keep going!</p>
-
-      <div id="weeklySummaryContainer">
-        <h2>Last 7 Days Summary</h2>
-        <table id="weeklySummaryTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Steps</th>
-              <th>Calories</th>
-            </tr>
-          </thead>
-          <tbody>
-            </tbody>
-        </table>
-      </div>
-
-      <p id="insights"></p> <button onclick="resetSteps()">Reset Steps</button>
-      <button id="logoutBtn" onclick="logout()">Logout</button>
-      <p>Open this page on your phone, hold it and walk to test.</p>
+    <div class="container" id="celebration">
+        <div class="avatar">💍</div>
+        <h1>She Said Yes! 🎉</h1>
+        <p>I Love You Suhana! ❤️<br>- Divyansh</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">(Please screenshot send kar dena! 😉)</p>
     </div>
-  </div>
 
-  <script>
-    const loginBox = document.getElementById('loginBox');
-    const stepCounterBox = document.getElementById('stepCounterBox');
-    const errorMsg = document.getElementById('errorMsg');
-    const actionBtn = document.getElementById('actionBtn');
-    const formTitle = document.getElementById('formTitle');
-    const toggleLink = document.getElementById('toggleLink');
-    const illuminatiSymbol = document.getElementById('illuminatiSymbol');
-    const weightInput = document.getElementById('weight');
-    const dailyGoalInput = document.getElementById('dailyGoal');
+    <script>
+        // Function to make the "No" button run away
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - 200);
+            const y = Math.random() * (window.innerHeight - 200);
+            
+            // Just move it slightly within the card or screen to be annoying but cute
+            // Using fixed position for maximum chaos
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = Math.random() * 80 + '%';
+            noBtn.style.top = Math.random() * 80 + '%';
+        }
 
-    // Global variables for step counter and related features
-    let isRegistering = false;
-    let currentUserWeight = 70; // Default weight (kg) if not provided
-    let dynamicTargetSteps = 100; // Initial target for the day
-    let lastActivityCheckTime = 0;
-    const ACTIVITY_CHECK_INTERVAL = 1000; // Check activity every 1 second
-
-    let speaking = false; // To prevent overlapping speech
-    const synth = window.speechSynthesis;
-
-    let dailyData = {}; // Stores { 'YYYY-MM-DD': { steps: X, calories: Y } }
-    let userAchievements = {}; // Stores { 'achievementName': true/false }
-
-    // Step Counter and AI-Inspired Logic variables
-    let stepCount = 0;
-    let lastStepTime = 0;
-    let baseStepThresholdLow = 7.5;
-    let baseStepThresholdHigh = 14;
-    const STEP_DELAY = 300; // Minimum time between steps in milliseconds
-    const smoothingWindow = 10;
-    let accBuffer = [];
-    let netAccHistory = [];
-    const HISTORY_SIZE = 60;
-
-    const BASE_CALORIES_PER_STEP_FOR_70KG = 0.04;
-    let caloriesBurned = 0;
-    let currentActivity = 'Idle';
-
-    let lastSpokenStepCount = 0; // For voice feedback
-    let lastNotifiedStepCount = 0; // For progress notifications
-    let lastNotificationTime = 0; // For inactivity reminders
-
-    // DOM Elements
-    const stepsDisplay = document.getElementById('steps');
-    const caloriesDisplay = document.getElementById('calories');
-    const activityStatusDisplay = document.getElementById('activityStatus');
-    const lastStepDisplay = document.getElementById('lastStepTime');
-    const locationDisplay = document.getElementById('location');
-    const progressBar = document.getElementById('progress-bar');
-    const goalMessageDisplay = document.getElementById('goalMessage');
-    const weeklySummaryTableBody = document.querySelector('#weeklySummaryTable tbody');
-    const insightsDisplay = document.getElementById('insights');
-
-
-    function getTodayDateString() {
-        const today = new Date();
-        return today.toISOString().split('T')[0];
-    }
-
-    function loadDailyData() {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            dailyData = JSON.parse(localStorage.getItem(`dailyData_${loggedInUser}`)) || {};
-            userAchievements = JSON.parse(localStorage.getItem(`achievements_${loggedInUser}`)) || {};
-
-            const today = getTodayDateString();
-            if (dailyData[today]) {
-                stepCount = dailyData[today].steps;
-                caloriesBurned = dailyData[today].calories;
-            } else {
-                stepCount = 0;
-                caloriesBurned = 0;
-                dailyData[today] = { steps: 0, calories: 0 };
+        // Function for the "Yes" button
+        function acceptLove() {
+            document.getElementById('mainCard').style.display = 'none';
+            document.getElementById('celebration').style.display = 'block';
+            
+            // Confetti explosion effect (simple JS implementation)
+            for(let i=0; i<100; i++) {
+                createConfetti();
             }
         }
-    }
 
-    function saveDailyData() {
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            const today = getTodayDateString();
-            dailyData[today] = { steps: stepCount, calories: parseFloat(caloriesBurned.toFixed(2)) };
-            localStorage.setItem(`dailyData_${loggedInUser}`, JSON.stringify(dailyData));
-            localStorage.setItem(`achievements_${loggedInUser}`, JSON.stringify(userAchievements));
-            console.log("Daily data and achievements saved.");
-        }
-    }
+        function createConfetti() {
+            const colors = ['#ff4757', '#2ed573', '#1e90ff', '#ffa502'];
+            const confetti = document.createElement('div');
+            confetti.style.position = 'absolute';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.zIndex = '100';
+            confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
+            document.body.appendChild(confetti);
 
-    window.addEventListener('beforeunload', saveDailyData);
-
-    function login() {
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const pass = document.getElementById('password').value.trim();
-      if (!email || !pass) {
-        errorMsg.textContent = "Please enter both email and password.";
-        return;
-      }
-      const savedUsers = JSON.parse(localStorage.getItem('users')) || [];
-      const matchedUser = savedUsers.find(u => u.email === email && u.password === pass);
-      if (matchedUser) {
-        localStorage.setItem('loggedInUser', email);
-        currentUserWeight = matchedUser.weight || 70;
-        dynamicTargetSteps = matchedUser.dailyGoal || 100;
-        errorMsg.textContent = "";
-        showStepCounter();
-      } else {
-        errorMsg.textContent = "Invalid email or password!";
-      }
-    }
-
-    function register() {
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const pass = document.getElementById('password').value.trim();
-      const weight = parseFloat(document.getElementById('weight').value);
-      const dailyGoal = parseInt(document.getElementById('dailyGoal').value);
-
-      if (!email || !pass) {
-        errorMsg.textContent = "Please enter a valid email and password.";
-        return;
-      }
-      if (isNaN(weight) || weight < 30 || weight > 200) {
-        errorMsg.textContent = "Please enter a valid weight (30-200 kg).";
-        return;
-      }
-      if (isNaN(dailyGoal) || dailyGoal < 100) {
-        errorMsg.textContent = "Please set a daily goal (min 100 steps).";
-        return;
-      }
-
-      let users = JSON.parse(localStorage.getItem('users')) || [];
-      if (users.some(user => user.email === email)) {
-        errorMsg.textContent = "Account with this email already exists.";
-        return;
-      }
-      users.push({ email, password: pass, weight: weight, dailyGoal: dailyGoal });
-      localStorage.setItem('users', JSON.stringify(users));
-      errorMsg.style.color = "#00ff99";
-      errorMsg.textContent = "Registration successful! Please log in.";
-      toggleForm();
-    }
-
-    function toggleForm() {
-      isRegistering = !isRegistering;
-      if (isRegistering) {
-        formTitle.textContent = "Register";
-        actionBtn.textContent = "Register";
-        actionBtn.onclick = register;
-        toggleLink.textContent = "Back to Login";
-        weightInput.classList.remove('hidden');
-        dailyGoalInput.classList.remove('hidden');
-        errorMsg.style.color = "#ff8080";
-        errorMsg.textContent = "";
-        clearInputs();
-      } else {
-        formTitle.textContent = "Login";
-        actionBtn.textContent = "Login";
-        actionBtn.onclick = login;
-        toggleLink.textContent = "Create Account";
-        weightInput.classList.add('hidden');
-        dailyGoalInput.classList.add('hidden');
-        errorMsg.style.color = "#ff8080";
-        errorMsg.textContent = "";
-        clearInputs();
-      }
-    }
-
-    function clearInputs() {
-      document.getElementById('email').value = "";
-      document.getElementById('password').value = "";
-      document.getElementById('weight').value = "";
-      document.getElementById('dailyGoal').value = "";
-    }
-
-    function logout() {
-      saveDailyData();
-      localStorage.removeItem('loggedInUser');
-      loginBox.classList.remove('hidden');
-      stepCounterBox.classList.add('hidden');
-      clearInputs();
-      isRegistering = false;
-      formTitle.textContent = "Login";
-      actionBtn.textContent = "Login";
-      actionBtn.onclick = login;
-      toggleLink.textContent = "Create Account";
-      weightInput.classList.add('hidden');
-      dailyGoalInput.classList.add('hidden');
-      errorMsg.textContent = "";
-      errorMsg.style.color = "#ff8080";
-      resetSteps();
-    }
-
-    function showStepCounter() {
-      loginBox.classList.add('hidden');
-      stepCounterBox.classList.remove('hidden');
-      errorMsg.textContent = "";
-      loadDailyData(); // Load current day's data, which sets stepCount and caloriesBurned
-      updateStepDisplay();
-      updateLastStepTime();
-      updateProgressBar();
-      updateCalories();
-      updateActivityStatus();
-      updateGoalMessage();
-      displayWeeklySummary();
-      generateInsights();
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(updateLocation, locationError);
-      }
-      requestMotionPermission();
-    }
-
-    // Check if a user is already logged in on page load
-    if (localStorage.getItem('loggedInUser')) {
-      showStepCounter();
-    } else {
-        weightInput.classList.add('hidden');
-        dailyGoalInput.classList.add('hidden');
-    }
-
-    function updateCalories() {
-      const adjustedCaloriesPerStep = BASE_CALORIES_PER_STEP_FOR_70KG * (currentUserWeight / 70);
-      caloriesBurned = stepCount * adjustedCaloriesPerStep;
-      caloriesDisplay.textContent = `Calories: ${caloriesBurned.toFixed(2)}`;
-    }
-
-    function updateGoalMessage() {
-      if (stepCount >= dynamicTargetSteps) {
-        goalMessageDisplay.textContent = `Goal Achieved! You walked ${dynamicTargetSteps} steps today!`;
-        if (!userAchievements['dailyGoalMaster'] && stepCount >= dynamicTargetSteps) {
-            unlockAchievement('dailyGoalMaster', 'Daily Goal Master!');
-        }
-        if (!localStorage.getItem('goalAchievedSpoken')) {
-             speakMessage(`Congratulations! You achieved your daily goal of ${dynamicTargetSteps} steps!`);
-             localStorage.setItem('goalAchievedSpoken', 'true');
-        }
-      } else {
-        const remaining = dynamicTargetSteps - stepCount;
-        goalMessageDisplay.textContent = `Goal: ${dynamicTargetSteps} steps. Keep going! ${remaining} steps left.`;
-        localStorage.removeItem('goalAchievedSpoken');
-      }
-
-      if (stepCount >= dynamicTargetSteps / 2 && stepCount < dynamicTargetSteps && (stepCount - lastNotifiedStepCount) >= (dynamicTargetSteps / 20) && !localStorage.getItem('halfwayGoalNotifiedToday')) {
-          sendNotification("Great progress!", `You're halfway to your goal of ${dynamicTargetSteps} steps!`);
-          speakMessage("You're halfway to your goal!");
-          localStorage.setItem('halfwayGoalNotifiedToday', 'true');
-          lastNotifiedStepCount = stepCount;
-      }
-    }
-
-    function resetSteps() {
-      stepCount = 0;
-      lastStepTime = 0;
-      caloriesBurned = 0;
-      accBuffer = [];
-      netAccHistory = [];
-      currentActivity = 'Idle';
-      localStorage.removeItem('halfwayGoalNotifiedToday');
-      localStorage.removeItem('goalAchievedSpoken');
-      updateStepDisplay();
-      updateLastStepTime();
-      updateProgressBar();
-      updateCalories();
-      updateActivityStatus();
-      updateGoalMessage();
-      locationDisplay.textContent = 'Location: N/A';
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(updateLocation, locationError);
-      }
-    }
-
-    function updateStepDisplay() {
-      stepsDisplay.textContent = `Steps: ${stepCount}`;
-    }
-
-    function updateLastStepTime() {
-      if (lastStepTime === 0) {
-        lastStepDisplay.textContent = 'Last step: N/A';
-        return;
-      }
-      const time = new Date(lastStepTime);
-      lastStepDisplay.textContent = `Last step: ${time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}`;
-    }
-
-    function updateProgressBar() {
-      const percent = Math.min((stepCount / dynamicTargetSteps) * 100, 100);
-      progressBar.style.width = percent + '%';
-      progressBar.classList.remove('pulse');
-      void progressBar.offsetWidth;
-      progressBar.classList.add('pulse');
-    }
-
-    function updateLocation(position) {
-      const lat = position.coords.latitude.toFixed(5);
-      const lon = position.coords.longitude.toFixed(5);
-      locationDisplay.textContent = `Location: Lat ${lat}, Lon ${lon}`;
-    }
-
-    function locationError(error) {
-      console.error('Geolocation Error:', error);
-      locationDisplay.textContent = 'Location: Permission denied or unavailable';
-    }
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(updateLocation, locationError);
-      navigator.geolocation.watchPosition(updateLocation, locationError, { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 });
-    }
-
-    function standardDeviation(arr) {
-      if (arr.length === 0) return 0;
-      const mean = arr.reduce((sum, val) => sum + val, 0) / arr.length;
-      const variance = arr.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / arr.length;
-      return Math.sqrt(variance);
-    }
-
-    function adjustThresholds() {
-      if (netAccHistory.length < HISTORY_SIZE / 2) return;
-
-      const avgHistoryAcc = netAccHistory.reduce((sum, val) => sum + val, 0) / netAccHistory.length;
-      const stdDevHistoryAcc = standardDeviation(netAccHistory);
-
-      baseStepThresholdLow = Math.max(0.5, avgHistoryAcc - stdDevHistoryAcc * 0.8);
-      baseStepThresholdHigh = avgHistoryAcc + stdDevHistoryAcc * 1.5;
-
-      baseStepThresholdLow = Math.min(Math.max(baseStepThresholdLow, 2), 10);
-      baseStepThresholdHigh = Math.min(Math.max(baseStepThresholdHigh, 10), 20);
-    }
-
-    function updateActivityStatus() {
-      if (netAccHistory.length === 0) {
-        currentActivity = 'Idle';
-      } else {
-        const avgHistoryAcc = netAccHistory.reduce((sum, val) => sum + val, 0) / netAccHistory.length;
-        const stdDevHistoryAcc = standardDeviation(netAccHistory);
-
-        if (avgHistoryAcc < 1.0 && stdDevHistoryAcc < 0.5) {
-          currentActivity = 'Idle';
-        } else if (avgHistoryAcc >= 1.0 && avgHistoryAcc < 6.0 && stdDevHistoryAcc > 0.5) {
-          currentActivity = 'Walking';
-        } else if (avgHistoryAcc >= 6.0 && stdDevHistoryAcc > 1.0) {
-          currentActivity = 'Running';
-        } else {
-          currentActivity = 'Moving';
-        }
-      }
-      activityStatusDisplay.textContent = `Activity: ${currentActivity}`;
-    }
-
-    setInterval(() => {
-      updateActivityStatus();
-      adjustThresholds();
-    }, ACTIVITY_CHECK_INTERVAL);
-
-    function handleMotion(event) {
-      const acc = event.accelerationIncludingGravity;
-      if (!acc || acc.x === null || acc.y === null || acc.z === null) {
-          return;
-      }
-
-      const x = acc.x;
-      const y = acc.y;
-      const z = acc.z;
-
-      const magnitude = Math.sqrt(x*x + y*y + z*z);
-      const netAcc = Math.abs(magnitude - 9.8);
-
-      accBuffer.push(netAcc);
-      if (accBuffer.length > smoothingWindow) {
-        accBuffer.shift();
-      }
-      netAccHistory.push(netAcc);
-      if (netAccHistory.length > HISTORY_SIZE) {
-        netAccHistory.shift();
-      }
-
-      const avgAcc = accBuffer.reduce((a,b)=>a+b,0) / accBuffer.length;
-      const now = Date.now();
-
-      if (avgAcc > baseStepThresholdLow && avgAcc < baseStepThresholdHigh && now - lastStepTime > STEP_DELAY) {
-        stepCount++;
-        lastStepTime = now;
-        updateStepDisplay();
-        updateLastStepTime();
-        updateProgressBar();
-        updateCalories();
-        updateGoalMessage();
-        checkAchievements();
-        speakStepConfirmation();
-      }
-    }
-
-    function speakStepConfirmation() {
-        if (stepCount % 50 === 0 && stepCount !== lastSpokenStepCount) {
-            speakMessage(`${stepCount} steps.`);
-            lastSpokenStepCount = stepCount;
-        } else if (stepCount > lastSpokenStepCount && (stepCount - lastSpokenStepCount >= 10) && (Math.floor(stepCount / 50) > Math.floor(lastSpokenStepCount / 50))) {
-            speakMessage(`You've reached ${Math.floor(stepCount/50)*50} steps!`);
-            lastSpokenStepCount = Math.floor(stepCount/50)*50;
-        }
-    }
-
-    function requestMotionPermission() {
-        if (window.DeviceMotionEvent) {
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                            window.addEventListener('devicemotion', handleMotion);
-                            console.log('DeviceMotion permission granted.');
-                        } else {
-                            console.warn('DeviceMotion permission not granted.');
-                            alert('Motion sensor access is required for step counting. Please enable it in your browser settings if prompted.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('DeviceMotion permission request failed:', error);
-                        alert('Motion sensor access request failed. Please check your browser settings.');
-                    });
-            } else {
-                window.addEventListener('devicemotion', handleMotion);
-                console.log('Listening to DeviceMotion events (no explicit permission needed).');
-            }
-        } else {
-            console.warn('DeviceMotionEvent is not supported on this browser/device.');
-            alert('Your device does not support motion sensors needed for step counting.');
-        }
-    }
-
-    function displayWeeklySummary() {
-        weeklySummaryTableBody.innerHTML = '';
-        const dates = [];
-        for (let i = 6; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            const dateStr = d.toISOString().split('T')[0];
-            dates.push(dateStr);
-        }
-
-        dates.forEach(dateStr => {
-            const data = dailyData[dateStr] || { steps: 0, calories: 0 };
-            const row = weeklySummaryTableBody.insertRow();
-
-            const displayDate = new Date(dateStr).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-
-            const dateCell = row.insertCell();
-            dateCell.textContent = displayDate;
-
-            const stepsCell = row.insertCell();
-            stepsCell.textContent = data.steps;
-
-            const caloriesCell = row.insertCell();
-            caloriesCell.textContent = data.calories.toFixed(1);
-        });
-    }
-
-    const ACHIEVEMENTS = {
-        'firstStep': { steps: 1, message: 'First Step!', speech: 'Congratulations on your first step!' },
-        'beginnerWalker': { steps: 100, message: 'Beginner Walker!', speech: 'You are now a beginner walker, great job!' },
-        'activeExplorer': { steps: 500, message: 'Active Explorer!', speech: 'Keep exploring, active explorer!' },
-        'dailyGoalMaster': { steps: -1, message: 'Daily Goal Master!', speech: 'You achieved your daily goal, excellent!' },
-        'marathonerLite': { steps: 42000, message: 'Marathoner Lite!', speech: 'Wow! You are walking like a marathoner!' }
-    };
-
-    function unlockAchievement(key, message) {
-        if (!userAchievements[key]) {
-            userAchievements[key] = true;
-            saveDailyData();
-            sendNotification('Achievement Unlocked!', message);
-            speakMessage(message);
-        }
-    }
-
-    function checkAchievements() {
-        if (stepCount >= 1 && !userAchievements['firstStep']) {
-            unlockAchievement('firstStep', ACHIEVEMENTS['firstStep'].message);
-        }
-        if (stepCount >= 100 && !userAchievements['beginnerWalker']) {
-            unlockAchievement('beginnerWalker', ACHIEVEMENTS['beginnerWalker'].message);
-        }
-        if (stepCount >= 500 && !userAchievements['activeExplorer']) {
-            unlockAchievement('activeExplorer', ACHIEVEMENTS['activeExplorer'].message);
-        }
-        if (stepCount >= 42000 && !userAchievements['marathonerLite']) {
-            unlockAchievement('marathonerLite', ACHIEVEMENTS['marathonerLite'].message);
-        }
-    }
-
-    function requestNotificationPermission() {
-        if (!("Notification" in window)) {
-            console.warn("This browser does not support desktop notification");
-            return;
-        }
-        if (Notification.permission === "granted") {
-            console.log("Notification permission already granted.");
-            return;
-        }
-        if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(function (permission) {
-                if (permission === "granted") {
-                    console.log("Notification permission granted!");
-                } else {
-                    console.warn("Notification permission denied.");
+            // Add keyframe dynamically if not exists (simplified logic)
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fall {
+                    to { transform: translateY(100vh) rotate(720deg); }
                 }
-            });
+            `;
+            document.head.appendChild(style);
         }
-    }
-    requestNotificationPermission();
-
-    function sendNotification(title, body) {
-        if (Notification.permission === "granted") {
-            new Notification(title, { body: body });
-        }
-    }
-
-    const INACTIVITY_REMINDER_INTERVAL = 2 * 60 * 60 * 1000;
-
-    function checkInactivityAndNotify() {
-        const now = Date.now();
-        if (localStorage.getItem('loggedInUser') && (now - lastStepTime > INACTIVITY_REMINDER_INTERVAL) && (now - lastNotificationTime > INACTIVITY_REMINDER_INTERVAL)) {
-            sendNotification("Time for a walk!", "It looks like you haven't moved in a while. Let's get some steps!");
-            speakMessage("Time for a walk! Let's get some steps!");
-            lastNotificationTime = now;
-        }
-    }
-    setInterval(checkInactivityAndNotify, INACTIVITY_REMINDER_INTERVAL);
-
-    function speakMessage(message) {
-        if (!synth) {
-            console.warn("Speech Synthesis not supported.");
-            return;
-        }
-        if (speaking) {
-            return;
-        }
-        const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = 'en-US';
-        utterance.pitch = 1;
-        utterance.rate = 1;
-        utterance.onstart = () => { speaking = true; };
-        utterance.onend = () => { speaking = false; };
-        utterance.onerror = (event) => {
-            console.error('SpeechSynthesisUtterance.onerror', event);
-            speaking = false;
-        };
-        synth.speak(utterance);
-    }
-
-    function generateInsights() {
-        const dates = Object.keys(dailyData).sort();
-        if (dates.length < 3) {
-            insightsDisplay.textContent = "Insight: Start walking more to get personalized insights!";
-            return;
-        }
-
-        const recentSteps = dates.slice(Math.max(0, dates.length - 7)).map(date => dailyData[date].steps);
-        const avgSteps = recentSteps.reduce((a, b) => a + b, 0) / recentSteps.length;
-        const totalStepsLast7Days = recentSteps.reduce((a, b) => a + b, 0);
-
-        let insight = "Your progress is looking good!";
-
-        if (recentSteps.length >= 7 && totalStepsLast7Days < dynamicTargetSteps * 4) {
-            insight = "Try to increase your activity. Consistency is key to reaching your goals!";
-        } else if (recentSteps.length >= 3 && avgSteps > dynamicTargetSteps * 1.2) {
-            insight = "You are consistently exceeding your goal! Consider setting a higher target for an even better challenge!";
-        } else if (stepCount < dynamicTargetSteps / 5 && dates.length > 1 && getTodayDateString() === dates[dates.length-1]) {
-            insight = "Today's steps are a bit low. A short walk can make a big difference for your daily target!";
-        } else if (recentSteps.length > 1 && recentSteps[recentSteps.length - 1] < recentSteps[recentSteps.length - 2] * 0.5) {
-            insight = "Your steps today are lower than yesterday. Try to pick up the pace and reach your goal!";
-        } else if (recentSteps.every(s => s >= dynamicTargetSteps)) {
-            insight = "You're a consistent goal-hitter! Keep up the excellent work!";
-        }
-        insightsDisplay.textContent = `Insight: ${insight}`;
-    }
-
-    illuminatiSymbol.addEventListener('click', () => {
-      const users = JSON.parse(localStorage.getItem('users')) || [];
-      if (users.length === 0) {
-        alert("No saved users found.");
-        return;
-      }
-      let output = "Saved Users (Email : Password, Weight, Daily Goal):\n\n";
-      users.forEach((user, i) => {
-        output += `${i+1}. ${user.email} : ${user.password} (${user.weight}kg, Goal: ${user.dailyGoal || 'N/A'} steps)\n`;
-      });
-      alert(output);
-    });
-
-    document.getElementById('actionBtn').addEventListener('click', () => {
-        // requestMotionPermission() is called within showStepCounter() after successful login/register
-    });
-
-  </script>
+    </script>
 </body>
 </html>
